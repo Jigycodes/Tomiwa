@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tomiwa, will you be my Valentine? 🌹</title>
+  <!-- Include the confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js" defer></script>
+  <style>
+    :root {
+      --primary: #e94d58;
+      --primary-hover: #ff6b7e;
+      --secondary: #ffd3d3;
+      --secondary-hover: #ffe3e3;
+      --background-start: #ff85a2;
+      --background-end: #ffacc7;
+      --font-family: 'Arial', sans-serif;
+    }
+    /* Reset & basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(45deg, var(--background-start), var(--background-end));
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-family);
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+    }
+    .heart {
+      font-size: 4rem;
+      animation: pulse 1.5s infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(0.95); }
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+    .gif-container {
+      margin: 1.5rem auto;
+      max-width: 300px;
+      display: none;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .gif-container img {
+      border-radius: 15px;
+      width: 100%;
+      height: auto;
+    }
+    /* Buttons Layout */
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem auto;
+      max-width: 400px;
+      width: 100%;
+    }
+    button {
+      padding: 1.2rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+      position: relative;
+      z-index: 1;
+      min-width: 120px;
+    }
+    #yesBtn {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(233, 77, 88, 0.3);
+    }
+    #noBtn {
+      background: var(--secondary);
+      color: var(--primary);
+      box-shadow: 0 4px 15px rgba(255, 211, 211, 0.3);
+    }
+    button:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(233, 77, 88, 0.4);
+      z-index: 2;
+    }
+    #yesBtn:hover {
+      background: var(--primary-hover);
+    }
+    #noBtn:hover {
+      background: var(--secondary-hover);
+    }
+    #successMessage {
+      display: none;
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin: 2rem 0;
+      font-weight: bold;
+      animation: textFloat 2s infinite;
+    }
+    .screenshot-reminder {
+      display: none;
+      color: var(--primary);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      font-style: italic;
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes textFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem; }
+      h1 { font-size: 1.8rem; }
+      .subtitle { font-size: 1rem; }
+      button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        min-width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="heart" aria-hidden="true">❤️</div>
+    <h1>Tomiwa, will you be my Valentine? 🌹</h1>
+    <p class="subtitle">In the spirit of enjoying each other's company.</p>
+    
+    <div class="gif-container" id="gifContainer">
+      <img id="currentGif" alt="Animated reaction" />
+    </div>
+    
+    <div class="buttons">
+      <button id="yesBtn" aria-label="Yes, I will be your Valentine!">YES! 😍</button>
+      <button id="noBtn" aria-label="No, I can't be your Valentine.">No 😢</button>
+    </div>
+    
+    <div id="successMessage" role="alert"></div>
+    <div class="screenshot-reminder" id="screenshotReminder">
+      Send me a screenshot of this page my good girl
+    </div>
+  </div>
+  
+  <audio id="confettiSound" src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3"></audio>
+  
+  <script>
+    // Get DOM elements
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const successMessage = document.getElementById('successMessage');
+    const confettiSound = document.getElementById('confettiSound');
+    const gifContainer = document.getElementById('gifContainer');
+    const currentGif = document.getElementById('currentGif');
+    const screenshotReminder = document.getElementById('screenshotReminder');
+
+    // Array of humorous GIFs for the "No" reaction
+    const sadGifs = [
+      'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTNrbTc2eTNtemM5ZXhkdjhsYWJybzF6NHd4bmJicXJzMHZ6cWszeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/0yXjVvEM2VWUX2CWpE/giphy.gif',
+      'https://media.giphy.com/media/ZBK7b4vHYyb0n70zJq/giphy.gif?cid=ecf05e4701p027hdxu8te9u0tcp9d2dobsvwmn39mmdsukrw&ep=v1_gifs_related&rid=giphy.gif&ct=g',
+      'https://media.giphy.com/media/BJEGePnDfDemfw7SQV/giphy.gif?cid=ecf05e4701p027hdxu8te9u0tcp9d2dobsvwmn39mmdsukrw&ep=v1_gifs_related&rid=giphy.gif&ct=g',
+      'https://media.giphy.com/media/11JliVf7HERhJu/giphy.gif?cid=ecf05e4701p027hdxu8te9u0tcp9d2dobsvwmn39mmdsukrw&ep=v1_gifs_related&rid=giphy.gif&ct=g',
+      'https://media.giphy.com/media/SqfHFPbzxw98xwFOiE/giphy.gif?cid=ecf05e4701p027hdxu8te9u0tcp9d2dobsvwmn39mmdsukrw&ep=v1_gifs_related&rid=giphy.gif&ct=g'
+    ];
+
+    // Customized messages to update the YES button text
+    let yesScale = 1;
+    let noScale = 1;
+    const messages = [
+      "Babymi naw",
+      "Biko",
+      "Ejor",
+      "Oh wow, ehhe?",
+      "You know you want me"
+    ];
+    let messageIndex = 0;
+
+    // "No" button click handler
+    noBtn.addEventListener('click', () => {
+      // Display a random humorous GIF
+      const randomGif = sadGifs[Math.floor(Math.random() * sadGifs.length)];
+      currentGif.src = randomGif;
+      gifContainer.style.display = 'block';
+
+      // Increase YES button size
+      yesScale += 0.2;
+      yesBtn.style.transform = `scale(${yesScale})`;
+      
+      // Decrease NO button size
+      noScale *= 0.9;
+      noBtn.style.transform = `scale(${noScale})`;
+
+      // Update the YES button text with playful messages
+      if (messageIndex < messages.length) {
+        yesBtn.textContent = messages[messageIndex];
+        messageIndex++;
+      } else {
+        yesBtn.textContent = "OK, JUST CLICK YES ALREADY!";
+      }
+    });
+
+    // "Yes" button click handler
+    yesBtn.addEventListener('click', () => {
+      // Trigger confetti effect for 3 seconds
+      const duration = 3000;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({
+          particleCount: 7,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#ff0000', '#ff7300', '#fffb00', '#48ff00', '#00ffd5', '#002bff', '#7a00ff', '#ff00c8']
+        });
+        confetti({
+          particleCount: 7,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#ff0000', '#ff7300', '#fffb00', '#48ff00', '#00ffd5', '#002bff', '#7a00ff', '#ff00c8']
+        });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+      // Play confetti sound
+      confettiSound.play().catch(error => console.error("Audio playback failed:", error));
+      
+      // Update and show success message and celebratory GIF
+      successMessage.style.display = 'block';
+      successMessage.textContent = "Good girl 💖";
+      gifContainer.style.display = 'block';
+      currentGif.src = 'https://media.giphy.com/media/L0qTl8hl84EDly62J1/giphy.gif?cid=790b76112di70bff52nypfys4290ee8x6a98dzeh4tvet8s2&ep=v1_gifs_search&rid=giphy.gif&ct=g';
+      screenshotReminder.style.display = 'block';
+      
+      // Optionally remove the buttons container after a successful response
+      const buttonsContainer = document.querySelector('.buttons');
+      if (buttonsContainer) {
+        buttonsContainer.remove();
+      }
+    });
+  </script>
+</body>
+</html>
