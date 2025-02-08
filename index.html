@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tomiwa, will you be my Valentine? 🌹</title>
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Include the confetti library -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="heart" aria-hidden="true">❤️</div>
+      <h1>Tomiwa, will you be my Valentine? 🌹</h1>
+      <p class="subtitle">In the spirit of enjoying each other's company.</p>
+
+      <div class="gif-container" id="gifContainer">
+        <img id="currentGif" alt="Animated reaction" />
+      </div>
+
+      <div class="buttons">
+        <button id="yesBtn" aria-label="Yes, I will be your Valentine!">YES! 😍</button>
+        <button id="noBtn" aria-label="No, I can't be your Valentine.">No 😢</button>
+      </div>
+
+      <div id="successMessage" role="alert"></div>
+      <div class="screenshot-reminder" id="screenshotReminder">
+        Send me a screenshot of this page my good girl
+      </div>
+    </div>
+
+    <audio
+      id="confettiSound"
+      src="https://assets.mixkit.co/active_storage/sfx/2997/2997-preview.mp3"
+    ></audio>
+
+    <!-- Link to external JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>
